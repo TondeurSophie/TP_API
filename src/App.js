@@ -14,9 +14,9 @@ function App() {
       <div className='header'>
         <Link className="button" to="/">Accueil</Link>
         <Link className="button" to="/liste">Liste</Link>
-        {localStorage.getItem("key") != null ?
+        {/* {localStorage.getItem("key") != null ? */}
         <Link className="button" to="/mes_articles">mes_articles</Link>
-        : null}
+        {/* : null} */}
         <Link className="button" to="/connexion">Connexion</Link>
         <Link className="button" to="/inscription">Inscription</Link>
         <Link className="button" to="/deconnexion">Deconnexion</Link>
