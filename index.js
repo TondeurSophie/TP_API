@@ -88,12 +88,12 @@ app.delete('/article/:titre', async(req, res) => {
 })
 
 //affichage de l'article avec le titre = ...
-app.get('/article/:titre', async (req, res) => {
+app.get('/jeux/:id', async (req, res) => {
     const titre = req.params.titre;
     let conn;
     try {
         conn = await pool.getConnection();
-        const rows = await conn.query('SELECT * FROM articles WHERE titre = ?;', [titre]);
+        const rows = await conn.query('SELECT * FROM jeux WHERE titre = ?;', [titre]);
         if (rows.length > 0) {
             res.status(200).json(rows);
             console.log(rows)
