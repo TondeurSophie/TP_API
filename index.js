@@ -19,13 +19,13 @@ app.use(express.json())
 app.use(cors())
 
 //connexion BDD
-app.get('/articles', async(req,res) => {
+app.get('/jeux', async(req,res) => {
     let conn;
     try{
         console.log("Lancement de la connexion")
         conn = await pool.getConnection();
         console.log("Lancement de la requête")
-        const rows = await conn.query('select * from articles');
+        const rows = await conn.query('select * from jeux');
         console.log(rows);
         res.status(200).json(rows);
     }
@@ -35,13 +35,13 @@ app.get('/articles', async(req,res) => {
 })
 
 //affichage de tous les titres
-app.get('/articles/titre', async(req,res) => {
+app.get('/jeux/id', async(req,res) => {
     let conn;
     try{
         console.log("Lancement de la connexion")
         conn = await pool.getConnection();
         console.log("Lancement de la requête")
-        const rows = await conn.query('select titre from articles');
+        const rows = await conn.query('select id_jeux from jeux');
         console.log(rows);
         res.status(200).json(rows);
     }
@@ -114,7 +114,7 @@ app.get('/article_mes/:id', async (req, res) => {
     let conn;
     try {
         conn = await pool.getConnection();
-        const rows = await conn.query('SELECT * FROM articles WHERE utilisateurs_id = ?;', [id_conn]);
+        const rows = await conn.query('SELECT * FROM jeux WHERE id = ?;', [id_conn]);
         console.log("connexion",rows)
         if (rows.length > 0) {
             res.status(200).json(rows);
