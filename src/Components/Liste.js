@@ -19,7 +19,7 @@ export default function Liste() {
  
    const recup = async ()=>{
      //Chargement BDD
-     await fetch(`http://localhost:3008/articles`, 
+     await fetch(`http://localhost:3008/jeux`, 
      {method: "GET"})
      .then(reponse => reponse.json()).then(data => {
          setblog(data);
