@@ -7,3 +7,5 @@ Lorsque l'on se connecte ou se déconnecte, il faut actualiser la page pour voir
 L'image de Pac-man redirige vers le menu principal et l'image de droite permet la déconnexion.
 Sur le pc de Morgane il n'y a aucune erreur dans la console.
 
+Et pour voir le prix, il faut cliquer 2 fois sur ajouter.
+
