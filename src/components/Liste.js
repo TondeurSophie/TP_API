@@ -7,6 +7,7 @@ export default function Liste() {
    const [blog, setblog] = useState([]); 
    // Pour gérer l'affichage
    const [affichage, setAffichage] = useState(false);
+   
    const [donnees, setDonnees] = useState({
     id_location:null,
     id_jeux:null,
@@ -114,7 +115,7 @@ const recupRecherche = async ()=>{
         <div>
             <br/>
             <center>
-            <input className="recherche" type="search"   placeholder='recherche' onChange={(e) => setRecherche({...recherche,titre:e.target.value})}></input>
+            <input className="recherche" type="search"   placeholder='Recherche' onChange={(e) => setRecherche({...recherche,titre:e.target.value})}></input>
             <button className="recherche" onClick={()=> recupRecherche()}>Rechercher</button>
             </center>
             <br/>        
