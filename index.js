@@ -114,6 +114,67 @@ app.post('/location', async(req, res) => {
     }
 })
 
+app.delete('/location/:titre', async(req, res) => {
+    const id = req.params.titre
+    
+    let conn;
+    try{
+        console.log("Lancement de la connexion")
+        conn = await pool.getConnection();
+        console.log("Lancement de la requête")
+        //suppression lorsque le titre correspond à l'id 
+        const supp = await conn.query('delete from `locations` where `titre` = ? ', [id]);
+        console.log(supp);
+        res.status(200).json(supp.affectedRows);
+    }
+    catch(err){
+        console.log(err);
+    }
+})
+
+
+app.put('/location/:note', async (req, res) => {
+    const id_location = req.params.id_location;
+    const { note } = req.body;
+
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        await conn.query(
+            
+            'UPDATE locations SET note = ? WHERE id_location = ?;',
+            [id_location, note]
+        );
+        res.status(200).json({ message: 'Article updated successfully' });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+        if (conn) conn.release();
+    }
+});
+
+app.put('/location/:note', async (req, res) => {
+    const id_location = req.params.id_location;
+    const { commentaires } = req.body;
+
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        await conn.query(
+            
+            'UPDATE locations SET commentaires = ? WHERE id_location = ?;',
+            [id_location, commentaires]
+        );
+        res.status(200).json({ message: 'Article updated successfully' });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+        if (conn) conn.release();
+    }
+});
+
 // //supprimer jeux
 app.delete('/jeux/:titre', async(req, res) => {
     const id = req.params.titre
