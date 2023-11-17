@@ -9,3 +9,4 @@ Sur le pc de Morgane il n'y a aucune erreur dans la console.
 
 Et pour voir le prix, il faut cliquer 2 fois sur ajouter.
 
+Dans src, il y a 2 dossiers components. Il faut utiliser uniquement celui avec le "c" minuscule (components).
