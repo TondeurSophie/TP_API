@@ -31,3 +31,14 @@ create table locations (
 -> date_retour datetime,
 -> note int,
 -> commentaires varchar(100));
+
+INSERT INTO utilisateurs values (2,"morgane","morgane@test.test","mdp");
+INSERT INTO utilisateurs values (1,"sophie","s.tondeur@test.test","mdp");
+insert into jeux values (1, "Mario Party", "Il y a plein de mini-jeux avec Mario et ces amis", 40);
+insert into jeux values (2, "Minecraft", "C'est un jeux d'aventure et de construction",50);
+insert into jeux values (3, "Mario Kart", "Tu choisis ta voiture, ton personnage, et tu joue a des courses ou mini-jeux",45);
+insert into jeux values (4,"Smash bros Ultimate", "Jeux de combat avec des personnages d'arcade et/ou jeux vidéo", 90);
+insert into jeux values (5, "Pac-Man", "Jeux avec des fantômes. Pac-Man doit les éviter, manger pour prendre des forces", 20);
+insert into jeux values (6, "Tetris", "Tu dois embriquer des formes sans atteindre le haut.",25);
+insert into locations values (1,1,1,"2012-12-26","2014-12-27",4,"Ce jeux est plutot bien");
+insert into locations values (2,2,4,"2023-01-12","2023-12-24",3,"Ce jeux est compliqué, mais amusant");
