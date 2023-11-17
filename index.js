@@ -88,7 +88,7 @@ app.delete('/article/:titre', async(req, res) => {
 })
 
 //affichage de l'article avec le titre = ...
-app.get('/jeux/:id', async (req, res) => {
+app.get('/jeux/:titre', async (req, res) => {
     const titre = req.params.titre;
     let conn;
     try {
