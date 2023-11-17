@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 
 
 console.log(process.env.DB_HOST)
+//connexion à la base de données. Informations du fichier .env
 const pool = mariadb.createPool({
     host: process.env.DB_HOST,
     database: process.env.DB_DTB,
@@ -15,6 +16,7 @@ const pool = mariadb.createPool({
     connectLimit:100
 });
 
+//utilisation d'express et cors
 app.use(express.json())
 app.use(cors())
 
@@ -50,17 +52,47 @@ app.get('/jeux/id', async(req,res) => {
     }
 })
 
-
-
-//ajout article
-app.post('/article', async(req, res) => {
-    console.log("post",req);
+//affichage des locations
+app.get('/locations', async(req,res) => {
     let conn;
     try{
         console.log("Lancement de la connexion")
         conn = await pool.getConnection();
         console.log("Lancement de la requête")
-        const rows = await conn.query('insert into articles values (?,?,?,?,?)', [req.body.utilisateurs_id,req.body.titre,req.body.auteur,req.body.date_creation,req.body.texte]);
+        const rows = await conn.query('select * from locations');
+        console.log(rows);
+        res.status(200).json(rows);
+    }
+    catch(err){
+        console.log(err);
+    }
+})
+
+//affichage des locations en fonction id_utilisateur
+app.get('/locations', async(req,res) => {
+    let conn;
+    try{
+        console.log("Lancement de la connexion")
+        conn = await pool.getConnection();
+        console.log("Lancement de la requête")
+        const rows = await conn.query('select * from locations where');
+        console.log(rows);
+        res.status(200).json(rows);
+    }
+    catch(err){
+        console.log(err);
+    }
+})
+
+//ajout location
+app.post('/location', async(req, res) => {
+    console.log("post",req.body);
+    let conn;
+    try{
+        console.log("Lancement de la connexion")
+        conn = await pool.getConnection();
+        console.log("Lancement de la requête")
+        const rows = await conn.query('insert into locations values (?,?,?,?,?,?,?)', [req.body.id_location,req.body.utilisateurs_id,req.body.id_jeux,req.body.date_emprunt,req.body.date_retour,req.body.note,req.body.commentaires]);
         // console.log(rows);
         res.status(200).json(rows.affectedRows);
     }
@@ -69,8 +101,8 @@ app.post('/article', async(req, res) => {
     }
 })
 
-// //supprimer article
-app.delete('/article/:titre', async(req, res) => {
+// //supprimer jeux
+app.delete('/jeux/:titre', async(req, res) => {
     const id = req.params.titre
     
     let conn;
@@ -78,7 +110,7 @@ app.delete('/article/:titre', async(req, res) => {
         console.log("Lancement de la connexion")
         conn = await pool.getConnection();
         console.log("Lancement de la requête")
-        const supp = await conn.query('delete from `articles` where `titre` = ? ', [id]);
+        const supp = await conn.query('delete from `jeux` where `titre` = ? ', [id]);
         console.log(supp);
         res.status(200).json(supp.affectedRows);
     }
