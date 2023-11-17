@@ -1,123 +1,102 @@
 import React, { useEffect, useState } from 'react';
+import '../App.css';
 
 export default function Mes_articles() {
-    const [blog, setblog] = useState([]); 
-    const [affichage, setAffichage] = useState(false);
-    const [donnees, setDonnees] = useState({
-        utilisateurs_id:localStorage.getItem("key"),
-        titre:null,
-        auteur:null,
-        date_creation:null,
-        texte:null
-    });
+  const [blog, setBlog] = useState([]);
+  const [affichage, setAffichage] = useState(false);
 
-    const [donneesModif, setDonneesModif] = useState({
-        texte :null
-    });
+  const [donneesNote, setDonneesNote] = useState({
+    note: "",
+    commentaire: ""
+  });
 
-    console.log(localStorage)
-    const recupArticles = async ()=>{
-        const id=localStorage.getItem("key")
-        //Chargement BDD
-        await fetch(`http://localhost:3008/article_mes/${id}`, 
-        {method: "GET"})
-        .then(reponse => {
-            
-            if (reponse.status === 200){
-
-                reponse.json().then(data => {
-                    setblog(data)
-                    setAffichage(true)
-                })
-                
-                // console.log(data);
-            }else{
-                console.log("rien");
-            }
-        })
-          .catch(error => console.error(error));
-      };
-
-      useEffect(() => {
-        recupArticles()
-    },[])
-
-    const deleted = async (titre)=>{
-        try {
-        const reponse = await fetch(`http://localhost:3008/article/${titre}`, 
-        {method: "DELETE"})
-          if(reponse.status === 200){
-            //console.log(titre);
-            window.location.reload();
-          }
-        }
-        catch(error){
-          console.error(error);
-        }
-    } 
-
-    const ajout = async ()=>{
-        try {
-          console.log(donnees)
-        const reponse = await fetch(`http://localhost:3008/article`, 
-        {method: "POST", headers:{'Content-Type':'application/json'} ,body: JSON.stringify(donnees)})
-          if(reponse.status === 200){
-            window.location.reload();
-          }
-        }
-        catch(error){
-          console.error(error);
-        }
-      } 
-
-    const modifie = async ()=>{
-        try {
-            const reponse = await fetch(`http://localhost:3008/article/:titre`, 
-            {method: "PUT", headers:{'Content-Type':'application/json'} ,body: JSON.stringify(donneesModif)})
-              if(reponse.status === 200){
-                //console.log(titre);
-                window.location.reload();
-              }
-            }
-            catch(error){
-              console.error(error);
-            }
+  const recupLocation = async () => {
+    const id = localStorage.getItem("key");
+    try {
+      const response = await fetch(`http://localhost:3008/location/${id}`, { method: "GET" });
+      if (response.status === 200) {
+        const data = await response.json();
+        setBlog(data);
+        setAffichage(true);
+      } else {
+        console.log("rien");
+      }
+    } catch (error) {
+      console.error(error);
     }
-   
+  };
+
+  useEffect(() => {
+    recupLocation();
+  }, []);
+
+  const note = async (id_location, noteActuelle, key) => {
+    const id = localStorage.getItem("key");
+
+    // Vérifier que la note est entre 1 et 5
+    if (donneesNote.note >= 1 && donneesNote.note <= 5) {
+      try {
+        await fetch(`http://localhost:3008/locationNote/${id_location}`, {
+          method: "PUT",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id_jeux: id_location, note: donneesNote.note })
+        });
+
+        console.log("Key récupérée :", key);
+
+        setDonneesNote(prevState => ({
+          ...prevState,
+          note: ""
+        }));
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.log("La note doit être entre 1 et 5");
+      alert ("La note doit être entre 1 et 5")
+    }
+  };
+
+  const commenter = async (id_location, key) => {
+    try {
+      await fetch(`http://localhost:3008/locationComm/${id_location}`, {
+        method: "PUT",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ commentaires: donneesNote.commentaire })
+      });
+
+      console.log("Key récupérée :", key);
+
+      setDonneesNote(prevState => ({
+        ...prevState,
+        commentaire: ""
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-    <div>Mes_articles
-        {affichage ? 
-         blog.map(articles => (
-           <div>
-             <fieldset>
-               <p>Date de publication : {articles.date_creation}</p>
-               <p>Auteur : {articles.auteur}</p>
-               <p>Titre : {articles.titre}</p>
-               <p> {articles.texte}</p>
-               <button onClick={()=> deleted(articles.titre)}>Supprimer</button>
-               <br/>
-               <input type="text"  placeholder='modifier le texte' onChange={(e) => setDonneesModif({...donneesModif,texte:e.target.value})}></input>
-               <button onClick={()=> modifie()}>Modifier</button>
-             </fieldset>
-           </div>
-         )) : <p>Chargement ...</p>}
-
-
-
-         {localStorage.getItem("key") != null ?
-        <input type="text"  placeholder='date_creation' onChange={(e) => setDonnees({...donnees,date_creation:e.target.value})}></input>: null}
-        <br/>
-        {localStorage.getItem("key") != null ?
-        <input type="text"  placeholder='Titre' onChange={(e) => setDonnees({...donnees,titre:e.target.value})}></input>: null}
-        <br/>
-        {localStorage.getItem("key") != null ?
-        <input type="text"  placeholder='Auteur' onChange={(e) => setDonnees({...donnees,auteur:e.target.value})}></input>: null}
-        <br/>
-        {localStorage.getItem("key") != null ?
-        <input type="text"  placeholder='Texte' onChange={(e) => setDonnees({...donnees,texte:e.target.value})}></input>: null}
-        <br/>
-        {localStorage.getItem("key") != null ?<button onClick={() => ajout()}>Ajouter</button>: null}
+    <div>Mes locations :
+      {affichage ?
+        blog.map(jeux => (
+          <div key={jeux.id_location}>
+            <fieldset className='case'>
+              <p> Location n° : {jeux.id_location}</p>
+              <p> Date emprunt : {jeux.date_emprunt}</p>
+              <p> Date retour : {jeux.date_retour} </p>
+              <p> Jeu n° : {jeux.id_jeux}</p>
+              <p> Note du jeu :{jeux.note}</p>
+              <p> Commentaire : {jeux.commentaires}</p>
+              <br />
+              <input type="number" placeholder='note entre 1 et 5' onChange={(e) => setDonneesNote({ ...donneesNote, note: e.target.value })}></input>
+              <button onClick={() => note(jeux.id_location, jeux.note, localStorage.getItem("key"))}>Noter</button>
+              <input type="text" placeholder='Commentaire' onChange={(e) => setDonneesNote({ ...donneesNote, commentaire: e.target.value })}></input>
+              <button onClick={() => commenter(jeux.id_location, localStorage.getItem("key"))}>Commenter</button>
+              <br />
+            </fieldset>
+          </div>
+        )) : <p>Chargement ...</p>}
     </div>
-  )
+  );
 }

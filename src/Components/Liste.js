@@ -1,108 +1,72 @@
 import React, { useEffect, useState } from 'react';
 import '../App.css';
 
-const Liste = () => {
+export default function Mes_articles() {
   const [blog, setBlog] = useState([]);
   const [affichage, setAffichage] = useState(false);
-  const [recherche, setRecherche] = useState({ titre: "" });
+  const [donneesNote, setDonneesNote] = useState({
+    note: ""
+  });
 
-  const recup = async () => {
+  const recupLocation = async () => {
+    const id = localStorage.getItem("key");
     try {
-      const response = await fetch('http://localhost:3008/jeux', { method: "GET" });
-
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP! Statut : ${response.status}`);
-      }
-
-      const data = await response.json();
-      setBlog(data);
-      setAffichage(true);
-    } catch (error) {
-      console.error(error);
-      setAffichage(false);
-    }
-  };
-
-  const rechercher = async () => {
-    try {
-      const response = await fetch('http://localhost:3008/jeux/titre', { method: "GET" });
-
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP! Statut : ${response.status}`);
-      }
-
-      const data = await response.json();
-      setBlog(data);
-      setAffichage(true);
-    } catch (error) {
-      console.error(error);
-      setAffichage(false);
-    }
-  };
-
-  const recupRecherche = async () => {
-    // Vérifier si la case de recherche n'est pas vide
-    if (recherche.titre.trim() !== "") {
-      try {
-        const response = await fetch(`http://localhost:3008/jeux/${recherche.titre}`, { method: "GET" });
-
-        if (!response.ok) {
-          throw new Error(`Erreur HTTP! Statut : ${response.status}`);
-        }
-
+      const response = await fetch(`http://localhost:3008/location/${id}`, { method: "GET" });
+      if (response.status === 200) {
         const data = await response.json();
         setBlog(data);
         setAffichage(true);
-      } catch (error) {
-        console.error(error);
-        setBlog([]); // Réinitialiser le tableau blog à vide en cas de recherche infructueuse
-        setAffichage(false);
+      } else {
+        console.log("rien");
       }
-    } else {
-      // La case de recherche est vide, ne pas faire la recherche
-      setBlog([]);
-      setAffichage(true); // Afficher tous les jeux si la recherche est vide
+    } catch (error) {
+      console.error(error);
     }
   };
 
   useEffect(() => {
-    recup();
-    rechercher();
+    recupLocation();
   }, []);
 
+  const note = async (id_location, noteActuelle) => {
+    const id = localStorage.getItem("key");
+
+    // Utilisez l'id_location passé en paramètre pour identifier la location correcte
+    try {
+      const response = await fetch(`http://localhost:3008/locationNote/${id_location}`, {
+        method: "PUT",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_jeux: id_location, note: donneesNote.note })
+      });
+
+      if (response.status === 200) {
+        console.log(donneesNote);
+        // Effectuez une nouvelle requête pour récupérer les données mises à jour
+        recupLocation();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <div>
-      <div>
-        <br />
-        <center>
-          <input
-            className="recherche"
-            type="search"
-            placeholder='Recherche'
-            onChange={(e) => setRecherche({ titre: e.target.value })}
-          />
-          <button className="recherche" onClick={recupRecherche}>Rechercher</button>
-        </center>
-        <br />
-      </div>
-      <center>
-        <h1>Liste de tous nos Jeux Vidéo</h1>
-      </center>
-      {/* Affichage uniquement si il y au moins un jeu dans la recherche sinon affichage */}
-      {blog.length > 0 ?
-        blog.map(article => (
-          <div key={article.id}>
-            <fieldset>
-              <p><u>Titre</u>: <i>{article.titre}</i></p>
-              <p>{article.texte}</p>
-              <p><li>{article.prix} euros</li></p>
+    <div>Mes locations :
+      {affichage ?
+        blog.map(jeux => (
+          <div cle={jeux.id_location}>
+            <fieldset className='case'>
+              <p> Date emprunt : {jeux.date_emprunt}</p>
+              <p> Date retour : {jeux.date_retour} </p>
+              <p> Jeu n° : {jeux.id_jeux}</p>
+              <p> Note du jeu :{jeux.note}</p>
+              <p> Commentaire : {jeux.commentaires}</p>
+              <br />
+              <input type="number" placeholder='note entre 1 et 5' onChange={(e) => setDonneesNote({ ...donneesNote, note: e.target.value })}></input>
+              <button onClick={() => note(jeux.id_location, jeux.note)}>Noter</button>
+              <br />
             </fieldset>
           </div>
-        )) : (
-          <p>{blog.length === 0 ? 'Aucun jeu ne correspond à votre recherche.' : 'Chargement...'}</p>
-        )}
+        )) : <p>Chargement ...</p>}
     </div>
   );
-};
-
-export default Liste;
+}
