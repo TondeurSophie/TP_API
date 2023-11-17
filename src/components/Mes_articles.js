@@ -3,19 +3,19 @@ import React, { useEffect, useState } from 'react';
 export default function Mes_articles() {
     const [blog, setblog] = useState([]); 
     const [affichage, setAffichage] = useState(false);
-    const [donnees, setDonnees] = useState({
-        id_location:null,
-        id_jeux:null,
-        utilisateurs_id:localStorage.getItem("key"),
-        date_emprunt:null,
-        date_retour:null,
-    });
+    // const [donnees, setDonnees] = useState({
+    //     id_location:null,
+    //     id_jeux:null,
+    //     utilisateurs_id:localStorage.getItem("key"),
+    //     date_emprunt:null,
+    //     date_retour:null,
+    // });
 
     const [donneesModif, setDonneesModif] = useState({
         note :null
     });
 
-    console.log(localStorage)
+    //console.log(localStorage)
     const recupArticles = async ()=>{
         const id=localStorage.getItem("key")
         //Chargement BDD
@@ -54,19 +54,19 @@ export default function Mes_articles() {
         }
     } 
 
-    const ajout = async ()=>{
-        try {
-          console.log(donnees)
-        const reponse = await fetch(`http://localhost:3008/article`, 
-        {method: "POST", headers:{'Content-Type':'application/json'} ,body: JSON.stringify(donnees)})
-          if(reponse.status === 200){
-            window.location.reload();
-          }
-        }
-        catch(error){
-          console.error(error);
-        }
-      } 
+    // const ajout = async ()=>{
+    //     try {
+    //       console.log(donnees)
+    //     const reponse = await fetch(`http://localhost:3008/article`, 
+    //     {method: "POST", headers:{'Content-Type':'application/json'} ,body: JSON.stringify(donnees)})
+    //       if(reponse.status === 200){
+    //         window.location.reload();
+    //       }
+    //     }
+    //     catch(error){
+    //       console.error(error);
+    //     }
+    //   } 
 
     const note = async ()=>{
         try {
@@ -105,22 +105,6 @@ export default function Mes_articles() {
              </fieldset>
            </div>
          )) : <p>Chargement ...</p>}
-
-
-
-         {localStorage.getItem("key") != null ?
-        <input type="text"  placeholder='date_emprunt' onChange={(e) => setDonnees({...donnees,date_creation:e.target.value})}></input>: null}
-        <br/>
-        {localStorage.getItem("key") != null ?
-        <input type="text"  placeholder='date_retour' onChange={(e) => setDonnees({...donnees,titre:e.target.value})}></input>: null}
-        <br/>
-        {localStorage.getItem("key") != null ?
-        <input type="text"  placeholder='Titre du jeux' onChange={(e) => setDonnees({...donnees,auteur:e.target.value})}></input>: null}
-        <br/>
-        {/* {localStorage.getItem("key") != null ?
-        <input type="text"  placeholder='Texte' onChange={(e) => setDonnees({...donnees,texte:e.target.value})}></input>: null}
-        <br/> */}
-        {localStorage.getItem("key") != null ?<button onClick={() => ajout()}>Ajouter</button>: null}
     </div>
   )
 }
