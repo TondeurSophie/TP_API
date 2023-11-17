@@ -19,14 +19,21 @@ export default function Liste() {
  
    const recup = async ()=>{
      //Chargement BDD
-     await fetch(`http://localhost:3008/jeux`, 
-     {method: "GET"})
-     .then(reponse => reponse.json()).then(data => {
-         setblog(data);
-         setAffichage(true);
-        //  console.log(data);
-       })
-       .catch(error => console.error(error));
+     try{
+       const response = await fetch(`http://localhost:3008/jeux`, 
+       {method: "GET"})
+
+       if(!response.ok){
+        throw new Error(`Erreur HTTP! Statut : ${response.status}`);
+       }
+     
+     const data = await response.json();
+      setblog(data);
+      setAffichage(true);
+    } catch (error) {
+      console.error(error);
+      setAffichage(false);
+    }
    };
  
  
@@ -37,14 +44,22 @@ export default function Liste() {
 const [titre, setTitre] = useState([]);
 
 const rechercher = async ()=>{
+  try{
     //Chargement BDD
-    await fetch(`http://localhost:3008/jeux/titre`, 
+    const response = await fetch(`http://localhost:3008/jeux/titre`, 
     {method: "GET"})
-    .then(reponse => reponse.json()).then(data => {
-        setTitre(data);
-        setAffichage(true);
-    })
-    .catch(error => console.error(error));
+
+    if(!response.ok){
+      throw new Error(`Erreur HTTP! Status : ${response.status}`)
+    }
+  
+    const data = await response.json();
+      setblog(data);
+      setAffichage(true);
+    } catch (error) {
+      console.error(error);
+      setAffichage(false);
+    }
 };
 
 useEffect(() => {
@@ -53,16 +68,29 @@ useEffect(() => {
 },[])
 
 const recupRecherche = async ()=>{
-    console.log(recherche.titre)
-    await fetch(`http://localhost:3008/jeux/${recherche.titre}`, 
-    {method: "GET"})
-    .then(reponse => reponse.json()).then(data => {
-        console.log(data)
-        setblog(data);
-        setAffichage(true);
-        // console.log(data);
-      })
-      .catch(error => console.error(error));
+  // Vérifier si la case de recherche n'est pas vide
+  if (recherche.titre.trim() !== "") {
+    try{
+      // console.log(recherche.titre)
+      const response = await fetch(`http://localhost:3008/jeux/${recherche.titre}`, 
+      {method: "GET"})
+
+      if(!response.ok){
+        throw new Error(`Erreur HTTP! Status : ${response.status}`)
+      }
+      const data = await response.json();
+      setblog(data);
+      setAffichage(true);
+    } catch (error) {
+      console.error(error);
+      setblog([]); // Réinitialiser le tableau blog à vide en cas de recherche infructueuse
+      setAffichage(false);
+    }
+  } else {
+    // La case de recherche est vide, ne pas faire la recherche
+    setblog([]);
+    setAffichage(true); // Afficher tous les jeux si la recherche est vide
+  }
   };
 
   const ajoutLocation = async ()=>{
@@ -94,14 +122,16 @@ const recupRecherche = async ()=>{
         <center>
             <h1>Liste de tous nos Jeux Vidéo</h1>
         </center>
-       {affichage ? 
+       {blog.length > 0 ? 
          blog.map(articles => (
-           <div>
+           <div key={articles.id}>
              <fieldset>
               <p> Jeu n° {articles.id_jeux}</p>
                <p><u>Titre </u>: <i>{articles.titre}</i></p>
                <p> {articles.texte}</p>
                <p> <li>{articles.prix} euros</li></p>
+
+
                {localStorage.getItem("key") != null ?<p><u>Louer ce jeu </u>:</p>: null}
               {localStorage.getItem("key") != null ?
               <input type="text"  placeholder='date_emprunt' onChange={(e) => setDonnees({...donnees,date_emprunt:e.target.value})}></input>: null}
@@ -115,7 +145,10 @@ const recupRecherche = async ()=>{
               {localStorage.getItem("key") != null ?<button onClick={() => ajoutLocation()}>Ajouter</button>: null}
              </fieldset>
            </div>
-         )) : <p>Chargement ...</p>}
+         )) : 
+         (
+          <p>{blog.length === 0 ? 'Aucun jeu ne correspond à votre recherche.' : 'Chargement...'}</p>
+        )}
          <div>
       </div>
      </div>
