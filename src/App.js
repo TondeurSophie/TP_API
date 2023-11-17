@@ -1,5 +1,7 @@
-import './App.css';
-import { Routes, Route, Link } from 'react-router-dom';
+import './App.css'; //relie cette page au css App.css
+import { Routes, Route, Link } from 'react-router-dom'; //permet l'utilisation de routes
+
+//permet d'appeller le composent
 import Accueil from './components/Accueil.js';
 import Profil from './components/Profil.js';
 import Liste from './components/Liste.js';
@@ -13,7 +15,9 @@ function App() {
   return (
     <div>
       <div className='header'>
+        {/* j'ai mis une image qui fait office de bouton */}
         <Link  to="/"><img src={`${process.env.PUBLIC_URL}/pac-man.png`} alt='' className='pac-man' /></Link>
+        {/* lien vers les autres pages */}
         <Link className="button" to="/liste">Liste</Link>
         {localStorage.getItem("key") != null ?
         <Link className="button" to="/mes_articles">mes Locations</Link>
@@ -28,6 +32,8 @@ function App() {
       <center><h1 className='titre'>Retro Gaming ! ! !</h1></center>
     <Routes>     
         {/* <Route exact path="/" component={<Accueil/>} /> */}
+
+        {/* permt la naviguation */}
         <Route path="/"           element={<Accueil/>}/>
         <Route path="/liste"      element={<Liste/>} />
         <Route path="/profil"      element={<Profil/>} />

@@ -3,6 +3,7 @@ import '../App.css'
 
 export default function Deconnexion() {
 
+  //vide le localStorage / enlève l'id de l'utilisateur enregistré
         localStorage.clear();
     
   return (

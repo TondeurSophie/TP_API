@@ -3,13 +3,14 @@ import '../App.css'
 
 export default function Inscription() {
 
+  //récupération des valeurs de l'utilisateur du formulaire
   const [donneesUtili, setDonneesUtili] = useState({
     nom:null,
     email:null,
     mdp:null
 });
 
-   //ajout utili
+   //ajout utilisateur dans la BDD grace au back
   const handleLogin = async () => {
     try {
       console.log(donneesUtili)

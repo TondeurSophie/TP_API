@@ -11,6 +11,7 @@ function Connexion() {
     mdp:null,
 });
 
+//permet de récupérer tous les utilisateurs
 const connexion = async ()=>{
   //Chargement BDD
   await fetch(`http://localhost:3008/utilisateurs`, 
@@ -23,6 +24,7 @@ const connexion = async ()=>{
   .catch(error => console.error(error));
 };
 
+//permet d'utiliser que l'utilisateur qui correspond à l'email et mdp
   const handleLogin = async () => {
     
     await fetch(`http://localhost:3008/utilisateursBDD`, 
@@ -34,13 +36,6 @@ const connexion = async ()=>{
       }}
       )
 
-    // .then(data => {
-        
-        
-        // setblog(data);
-        // setAffichage(true);
-        // console.log(data);
-      // })
       .catch(error => console.error(error));
   };
 

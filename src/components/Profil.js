@@ -12,7 +12,7 @@ export default function Profil() {
    });
 
    const recupUtilisateur = async ()=>{
-    const id=localStorage.getItem("key")
+    const id=localStorage.getItem("key") // récupération de l'id de l'utilisateur connecté
 
     //Chargement BDD
     await fetch(`http://localhost:3008/utilisateurs/${id}`, 
@@ -38,6 +38,7 @@ export default function Profil() {
     },[])
 
 
+    //permet de modifier le nom de l'utilisateur
     const nomModif = async ()=>{
         const id=localStorage.getItem("key")
         try {
@@ -68,6 +69,7 @@ export default function Profil() {
                <p> Email : {utili.email} </p>
                <br/>
                <p>Modifier votre nom ?</p>
+               {/* le onChange permet de récupérer ce que rentre l'utilisateur */}
                <input type="text" placeholder='Nom' onChange={(e) => setDonneesModif({...donneesModif,nom:e.target.value})} ></input>
                <button onClick={()=> nomModif(utili.nom)}>Valider</button>
                <br/>
