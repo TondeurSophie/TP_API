@@ -30,7 +30,7 @@ const [titre, setTitre] = useState([]);
 
 const rechercher = async ()=>{
     //Chargement BDD
-    await fetch(`http://localhost:3008/articles/titre`, 
+    await fetch(`http://localhost:3008/jeux/titre`, 
     {method: "GET"})
     .then(reponse => reponse.json()).then(data => {
         setTitre(data);
@@ -45,8 +45,8 @@ useEffect(() => {
 },[])
 
 const recupRecherche = async ()=>{
-    // console.log(recherche.titre)
-    await fetch(`http://localhost:3008/article/${recherche.titre}`, 
+    console.log(recherche.titre)
+    await fetch(`http://localhost:3008/jeux/${recherche.titre}`, 
     {method: "GET"})
     .then(reponse => reponse.json()).then(data => {
         console.log(data)
