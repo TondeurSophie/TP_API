@@ -16,19 +16,18 @@ export default function Mes_articles() {
     });
 
     //console.log(localStorage)
-    const recupArticles = async ()=>{
+    const recupLocation = async ()=>{
         const id=localStorage.getItem("key")
         //Chargement BDD
-        await fetch(`http://localhost:3008/jeux/${id}`, 
+        await fetch(`http://localhost:3008/location/${id}`, 
         {method: "GET"})
         .then(reponse => {
             if (reponse.status === 200){
                 reponse.json().then(data => {
                     setblog(data)
                     setAffichage(true)
+                    console.log(data);
                 })
-                
-                // console.log(data);
             }else{
                 console.log("rien");
             }
@@ -37,36 +36,9 @@ export default function Mes_articles() {
       };
 
       useEffect(() => {
-        recupArticles()
+        recupLocation()
     },[])
 
-    const deleted = async (titre)=>{
-        try {
-        const reponse = await fetch(`http://localhost:3008/article/${titre}`, 
-        {method: "DELETE"})
-          if(reponse.status === 200){
-            //console.log(titre);
-            window.location.reload();
-          }
-        }
-        catch(error){
-          console.error(error);
-        }
-    } 
-
-    // const ajout = async ()=>{
-    //     try {
-    //       console.log(donnees)
-    //     const reponse = await fetch(`http://localhost:3008/article`, 
-    //     {method: "POST", headers:{'Content-Type':'application/json'} ,body: JSON.stringify(donnees)})
-    //       if(reponse.status === 200){
-    //         window.location.reload();
-    //       }
-    //     }
-    //     catch(error){
-    //       console.error(error);
-    //     }
-    //   } 
 
     const note = async ()=>{
         try {
@@ -84,18 +56,21 @@ export default function Mes_articles() {
    
 
   return (
-    <div>Mes_articles
+    <div>Mes locations :
         {affichage ? 
-         blog.map(articles => (
+         blog.map(jeux => (
            <div>
+            {console.log(jeux)}
              <fieldset>
-                <p><u>Titre </u>: <i>{articles.titre}</i></p>
-               <p> {articles.texte}</p>
-               <p> <li>{articles.prix} euros</li></p>
-               <p> {articles.note}</p>
-               <p> {articles.commentaires}</p>
+               <p> Date emprunt : {jeux.date_emprunt}</p>
+               <p> Date retour : {jeux.date_retour} </p>
+               <p> Jeu n° : {jeux.id_jeux}</p>
+               <p> Note du jeu :{jeux.note}</p>
+               <p> Commentaire : {jeux.commentaires}</p>
+               <br/>
                <input type="number" placeholder='note entre 1 et 5'></input>
                <button>Noter</button>
+               <br/>
                <input type="text" placholder="Commentaire"></input>
                <button>Commentaire</button>
                {/* <button onClick={()=> deleted(articles.titre)}>Supprimer</button> */}
