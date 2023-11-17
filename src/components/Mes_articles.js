@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import '../App.css'
 
 export default function Mes_articles() {
     const [blog, setblog] = useState([]); 
     const [affichage, setAffichage] = useState(false);
-    // const [donnees, setDonnees] = useState({
-    //     id_location:null,
-    //     id_jeux:null,
-    //     utilisateurs_id:localStorage.getItem("key"),
-    //     date_emprunt:null,
-    //     date_retour:null,
-    // });
+    
 
-    const [donneesModif, setDonneesModif] = useState({
-        note :null
+    const [donneesNote, setDonneesNote] = useState({
+        note :""
     });
 
     //console.log(localStorage)
@@ -41,12 +36,14 @@ export default function Mes_articles() {
 
 
     const note = async ()=>{
+      const id=localStorage.getItem("key")
+      
         try {
-            const reponse = await fetch(`http://localhost:3008/article/:titre`, 
-            {method: "PUT", headers:{'Content-Type':'application/json'} ,body: JSON.stringify(donneesModif)})
+            const reponse = await fetch(`http://localhost:3008/locationNote/${id}`, 
+            {method: "PUT", headers:{'Content-Type':'application/json'} ,body: JSON.stringify(donneesNote)})
               if(reponse.status === 200){
-                //console.log(titre);
-                window.location.reload();
+                console.log(donneesNote);
+                // window.location.reload();
               }
             }
             catch(error){
@@ -56,27 +53,25 @@ export default function Mes_articles() {
    
 
   return (
-    <div>Mes locations :
+    <div >Mes locations :
         {affichage ? 
          blog.map(jeux => (
            <div>
             {console.log(jeux)}
-             <fieldset>
+             <fieldset className='case'>
+              {/* <p> Location n° : {jeux.id_location}</p> */}
                <p> Date emprunt : {jeux.date_emprunt}</p>
                <p> Date retour : {jeux.date_retour} </p>
                <p> Jeu n° : {jeux.id_jeux}</p>
                <p> Note du jeu :{jeux.note}</p>
                <p> Commentaire : {jeux.commentaires}</p>
                <br/>
-               <input type="number" placeholder='note entre 1 et 5'></input>
-               <button>Noter</button>
+               <input type="number" placeholder='note entre 1 et 5' onChange={(e) => setDonneesNote({...donneesNote,note:e.target.value})}></input>
+               <button onClick={()=> note(jeux.note)}>Noter</button>
                <br/>
-               <input type="text" placholder="Commentaire"></input>
-               <button>Commentaire</button>
-               {/* <button onClick={()=> deleted(articles.titre)}>Supprimer</button> */}
-               <br/>
-               {/* <input type="text"  placeholder='modifier le texte' onChange={(e) => setDonneesModif({...donneesModif,texte:e.target.value})}></input>
-               <button onClick={()=> modifie()}>Modifier</button> */}
+               {/* <input type="text" placholder="Commentaire" onChange={(e) => setDonneesModif({...donneesModif,commentaires:e.target.value})}></input> */}
+               {/* <button onClick={()=> commentaires(jeux.commentaires)}>Commentaire</button> */}
+               
              </fieldset>
            </div>
          )) : <p>Chargement ...</p>}

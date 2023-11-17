@@ -7,7 +7,7 @@ export default function Liste() {
    const [blog, setblog] = useState([]); 
    // Pour gérer l'affichage
    const [affichage, setAffichage] = useState(false);
-   
+
    const [donnees, setDonnees] = useState({
     id_location:null,
     id_jeux:null,
@@ -126,7 +126,7 @@ const recupRecherche = async ()=>{
        {blog.length > 0 ? 
          blog.map(articles => (
            <div key={articles.id}>
-             <fieldset>
+             <fieldset className='case'>
               <p> Jeu n° {articles.id_jeux}</p>
                <p><u>Titre </u>: <i>{articles.titre}</i></p>
                <p> {articles.texte}</p>

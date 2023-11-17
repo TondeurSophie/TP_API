@@ -13,7 +13,7 @@ function App() {
   return (
     <div>
       <div className='header'>
-        <Link className="button" to="/">Accueil</Link>
+        <Link  to="/"><img src={`${process.env.PUBLIC_URL}/pac-man.png`} alt='' className='pac-man' /></Link>
         <Link className="button" to="/liste">Liste</Link>
         {localStorage.getItem("key") != null ?
         <Link className="button" to="/mes_articles">mes Locations</Link>
@@ -23,7 +23,7 @@ function App() {
         : null}
         <Link className="button" to="/connexion">Connexion</Link>
         <Link className="button" to="/inscription">Inscription</Link>
-        <Link className="button" to="/deconnexion">Deconnexion</Link>
+        <Link  to="/deconnexion"><img src={`${process.env.PUBLIC_URL}/deco3.png`} alt='' className='deco' /></Link>
       </div>
       <center><h1 className='titre'>Retro Gaming ! ! !</h1></center>
     <Routes>     
