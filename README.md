@@ -1,5 +1,5 @@
 # TP_API
-Pour le rendu de projet, il faut chercher dans 2 branches. Une pour le front et une pour le back
+Pour le rendu de projet, il faut chercher dans 2 branches: Final_front et Final_back. C'est pour palier à un problème de fichiers portant le même nom et aux fichiers trop lourds.
 
 Certaines fois, il faut relancer la connexion dans le terminal pour que tout s'affiche correctement.
 
