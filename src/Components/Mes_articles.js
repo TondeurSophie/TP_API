@@ -6,7 +6,8 @@ export default function Mes_articles() {
   const [affichage, setAffichage] = useState(false);
 
   const [donneesNote, setDonneesNote] = useState({
-    note: ""
+    note: "",
+    commentaire: ""
   });
 
   const recupLocation = async () => {
@@ -31,18 +32,44 @@ export default function Mes_articles() {
 
   const note = async (id_location, noteActuelle, key) => {
     const id = localStorage.getItem("key");
+
+    // Vérifier que la note est entre 1 et 5
+    if (donneesNote.note >= 1 && donneesNote.note <= 5) {
+      try {
+        await fetch(`http://localhost:3008/locationNote/${id_location}`, {
+          method: "PUT",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id_jeux: id_location, note: donneesNote.note })
+        });
+
+        console.log("Key récupérée :", key);
+
+        setDonneesNote(prevState => ({
+          ...prevState,
+          note: ""
+        }));
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.log("La note doit être entre 1 et 5");
+      alert ("La note doit être entre 1 et 5")
+    }
+  };
+
+  const commenter = async (id_location, key) => {
     try {
-      await fetch(`http://localhost:3008/locationNote/${id_location}`, {
+      await fetch(`http://localhost:3008/locationComm/${id_location}`, {
         method: "PUT",
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id_jeux: id_location, note: donneesNote.note })
+        body: JSON.stringify({ commentaires: donneesNote.commentaire })
       });
 
       console.log("Key récupérée :", key);
 
       setDonneesNote(prevState => ({
         ...prevState,
-        note: ""
+        commentaire: ""
       }));
     } catch (error) {
       console.error(error);
@@ -63,8 +90,9 @@ export default function Mes_articles() {
               <p> Commentaire : {jeux.commentaires}</p>
               <br />
               <input type="number" placeholder='note entre 1 et 5' onChange={(e) => setDonneesNote({ ...donneesNote, note: e.target.value })}></input>
-              {/* Ajout de la clé en tant qu'argument pour le bouton Noter */}
               <button onClick={() => note(jeux.id_location, jeux.note, localStorage.getItem("key"))}>Noter</button>
+              <input type="text" placeholder='Commentaire' onChange={(e) => setDonneesNote({ ...donneesNote, commentaire: e.target.value })}></input>
+              <button onClick={() => commenter(jeux.id_location, localStorage.getItem("key"))}>Commenter</button>
               <br />
             </fieldset>
           </div>
