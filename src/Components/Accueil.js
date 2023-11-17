@@ -6,11 +6,11 @@ export default function Accueil() {
     <div>
       <center>
         <br/>
-        Bienvenue sur notre blog
+        Bienvenue sur notre plateforme de location de jeux vidéo
         <br/>
-        Ce blog vous permet de lire des articles concernant les films et les animaux.
+        Vous pourrez louer diverses jeux vidéo. Que ce soit de vieux ou de récent jeux vidéo ... !
         <br/><br/>
-        <img src={`${process.env.PUBLIC_URL}/blog.jpeg`} alt='' className='image'/>
+        {/* <img src={`${process.env.PUBLIC_URL}/R.jpeg`} alt='' className='image'/> */}
         </center>
     </div>
   )

@@ -1,6 +1,9 @@
 .App {
   text-align: center;
 }
+body{
+  background-color: rgb(184, 236, 193);
+}
 
 .App-logo {
   height: 40vmin;
@@ -36,3 +39,56 @@
     transform: rotate(360deg);
   }
 }
+
+.formulaire{
+  background-color: #b7f903;
+  height: 25%;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 23%;
+  margin-left: 23%;
+  margin-right: 23%;
+  margin-bottom:10px;
+}
+
+.header{
+  background-color: rgb(0, 255, 38);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.titre{
+  background-color: rgb(0, 255, 38);
+  margin:0%;
+}
+.button{
+  margin-left: 10%;
+  margin-top: 5px;
+  background-color: #b7f903;
+  border-radius: 10%;
+  color:rgb(0, 0, 0);
+  border:solid 2px black;
+}
+
+.deconnexion{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* .recherche{
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+} */
+
+/* .image{
+  height: 50%;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */

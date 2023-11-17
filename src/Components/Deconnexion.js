@@ -1,12 +1,14 @@
 import React from 'react'
-
+import '../App.css'
 export default function Deconnexion() {
 
         localStorage.clear();
     
-  return (
-    <div>
-        Vous êtes déconnecté.
-    </div>
-  )
-}
+        return (
+            <div className='deconnexion'>
+                <center>
+                Vous êtes déconnecté.
+                </center>
+            </div>
+          )
+        }
