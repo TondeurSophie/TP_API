@@ -54,6 +54,8 @@ app.get('/jeux/id', async(req,res) => {
     }
 })
 
+
+
 // //ajout jeux
 app.post('/jeuxAjout', async(req, res) => {
     console.log("post",req.body);
@@ -99,7 +101,30 @@ app.get('/jeux/:titre', async (req, res) => {
     let conn;
     try {
         conn = await pool.getConnection();
+        //tous selectionner de la table jeux en fonction du titre
         const rows = await conn.query('SELECT * FROM jeux WHERE titre = ?;', [titre]);
+        if (rows.length > 0) {
+            res.status(200).json(rows);
+            console.log(rows)
+        } else {
+            res.status(404).json({ error: 'Article not found' });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+        if (conn) conn.release();
+    }
+});
+
+//affiche le prix
+app.get('/jeuxP/:id', async (req, res) => {
+    const id = req.params.id;
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        //tous selectionner de la table jeux en fonction du titre
+        const rows = await conn.query('SELECT prix FROM jeux WHERE id_jeux = ?;', [id]);
         if (rows.length > 0) {
             res.status(200).json(rows);
             console.log(rows)
@@ -124,7 +149,7 @@ app.put('/jeux/:titre', async (req, res) => {
     try {
         conn = await pool.getConnection();
         await conn.query(
-            
+            //modification de texte de la table jeux en fonction du titre
             'UPDATE jeux SET texte = ? WHERE titre = ?;',
             [texte, titre]
         );
@@ -165,7 +190,7 @@ app.put('/jeux/:titre', async (req, res) => {
         try {
             conn = await pool.getConnection();
             //je renvoie tous les éléments de la table locations lorsque l'id_utilisateur correspond à l'id de l'utilisateur qui c'est connecté
-            const rows = await conn.query('SELECT * FROM locations WHERE id_utilisateur = ?;', [id_conn]);
+            const rows = await conn.query('SELECT * FROM locations WHERE id_utilisateur = ? ;', [id_conn]);
             console.log("connexion",rows)
             if (rows.length > 0) {
                 res.status(200).json(rows);
@@ -209,7 +234,7 @@ app.put('/jeux/:titre', async (req, res) => {
         try {
             conn = await pool.getConnection();
             await conn.query(
-                
+                //modification de note de la table locations en fonction de l'id_location
                 'UPDATE locations SET note = ? WHERE id_location = ?;',
                 [note,id_location]
             );
@@ -231,7 +256,7 @@ app.put('/jeux/:titre', async (req, res) => {
         try {
             conn = await pool.getConnection();
             await conn.query(
-                
+                //modification de commentaires de la table locations en fonction de l'id_location
                 'UPDATE locations SET commentaires = ? WHERE id_location = ?;',
                 [commentaires,id_location ]
             );
@@ -272,6 +297,7 @@ app.get('/utilisateurs', async(req,res) => {
         console.log("Lancement de la connexion")
         conn = await pool.getConnection();
         console.log("Lancement de la requête")
+        //renvoie tous les utilisateurs et toutes leurs infos
         const rows = await conn.query('select * from utilisateurs');
         console.log(rows);
         res.status(200).json(rows);
@@ -385,6 +411,7 @@ app.put('/utilisateurModif/:id', async (req, res) => {
     try {
         conn = await pool.getConnection();
         await conn.query(
+            //modification de nom de la table utilisateurs en fonction de l'id
             'UPDATE utilisateurs SET nom = ? WHERE id = ?;',
             [nom,id]
         );
