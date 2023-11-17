@@ -27,6 +27,7 @@ app.get('/jeux', async(req,res) => {
         console.log("Lancement de la connexion")
         conn = await pool.getConnection();
         console.log("Lancement de la requête")
+        //je renvoie toute la table jeux
         const rows = await conn.query('select * from jeux');
         console.log(rows);
         res.status(200).json(rows);
@@ -43,6 +44,7 @@ app.get('/jeux/id', async(req,res) => {
         console.log("Lancement de la connexion")
         conn = await pool.getConnection();
         console.log("Lancement de la requête")
+        //je renvoie l'id_jeux de la table jeux
         const rows = await conn.query('select id_jeux from jeux');
         console.log(rows);
         res.status(200).json(rows);
@@ -59,6 +61,7 @@ app.get('/locations', async(req,res) => {
         console.log("Lancement de la connexion")
         conn = await pool.getConnection();
         console.log("Lancement de la requête")
+        //je renvoie toute la table locations
         const rows = await conn.query('select * from locations');
         console.log(rows);
         res.status(200).json(rows);
@@ -75,6 +78,7 @@ app.get('/location/:id', async (req, res) => {
     let conn;
     try {
         conn = await pool.getConnection();
+        //je renvoie tous les éléments de la table locations lorsque l'id_utilisateur correspond à l'id de l'utilisateur qui c'est connecté
         const rows = await conn.query('SELECT * FROM locations WHERE id_utilisateur = ?;', [id_conn]);
         console.log("connexion",rows)
         if (rows.length > 0) {
@@ -99,6 +103,8 @@ app.post('/location', async(req, res) => {
         console.log("Lancement de la connexion")
         conn = await pool.getConnection();
         console.log("Lancement de la requête")
+        //j'insére des valeurs dans la table locations de la base de données
+        //insertion de toutes les variables de la table
         const rows = await conn.query('insert into locations values (?,?,?,?,?,?,?)', [req.body.id_location,req.body.utilisateurs_id,req.body.id_jeux,req.body.date_emprunt,req.body.date_retour,req.body.note,req.body.commentaires]);
         // console.log(rows);
         res.status(200).json(rows.affectedRows);
@@ -117,6 +123,7 @@ app.delete('/jeux/:titre', async(req, res) => {
         console.log("Lancement de la connexion")
         conn = await pool.getConnection();
         console.log("Lancement de la requête")
+        //suppression lorsque le titre correspond à l'id 
         const supp = await conn.query('delete from `jeux` where `titre` = ? ', [id]);
         console.log(supp);
         res.status(200).json(supp.affectedRows);
@@ -126,7 +133,7 @@ app.delete('/jeux/:titre', async(req, res) => {
     }
 })
 
-//affichage de l'article avec le titre = ...
+//affichage du jeux avec le titre = ...
 app.get('/jeux/:titre', async (req, res) => {
     const titre = req.params.titre;
     let conn;
@@ -147,30 +154,30 @@ app.get('/jeux/:titre', async (req, res) => {
     }
 });
 
-//mes articles
-app.get('/jeux/:id', async (req, res) => {
-    const id_conn = req.params.id;
-    let conn;
-    try {
-        conn = await pool.getConnection();
-        const rows = await conn.query('SELECT * FROM jeux WHERE id = ?;', [id_conn]);
-        console.log("connexion",rows)
-        if (rows.length > 0) {
-            res.status(200).json(rows);
-            console.log(rows)
-        } else {
-            res.status(404).json({ error: 'Article not found' });
-        }
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: 'Internal Server Error' });
-    } finally {
-        if (conn) conn.release();
-    }
-})
+//mes jeux
+// app.get('/jeux/:id', async (req, res) => {
+//     const id_conn = req.params.id;
+//     let conn;
+//     try {
+//         conn = await pool.getConnection();
+//         const rows = await conn.query('SELECT * FROM jeux WHERE id = ?;', [id_conn]);
+//         console.log("connexion",rows)
+//         if (rows.length > 0) {
+//             res.status(200).json(rows);
+//             console.log(rows)
+//         } else {
+//             res.status(404).json({ error: 'Article not found' });
+//         }
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     } finally {
+//         if (conn) conn.release();
+//     }
+// })
 
 
-//modification article
+//modification jeux
 app.put('/article/:titre', async (req, res) => {
     const titre = req.params.titre;
     const { utilisateurs_id, auteur, date_creation, texte } = req.body;
@@ -223,6 +230,7 @@ app.post('/utilisateurs', async(req, res) => {
             console.log(req.body)
             conn = await pool.getConnection();
             console.log("Lancement de la requête")
+            //insertion dans la table utilisateurs les données récupèrées du front
             const rows = await conn.query('insert into utilisateurs (nom, email, mdp) values (?,?,?)', [req.body.nom,req.body.email,hash]);
             console.log(rows.affectedRows);
             res.status(200).json(rows.affectedRows);
@@ -240,6 +248,7 @@ app.post('/utilisateursBDD', async(req,res) => {
         console.log("Lancement de la connexion")
         conn = await pool.getConnection();
         console.log("Lancement de la requête")
+        //je selectionne tous de la table utilisateurs lorsque l'email correspond à l'un des "profil"
         const rows = await conn.query('select * from utilisateurs where email = ? ', [email]);
         console.log(rows)
         if (rows.length > 0) {
@@ -264,6 +273,45 @@ app.post('/utilisateursBDD', async(req,res) => {
         console.log(err);
     }
 })
+
+// //supprimer utilisateur
+app.delete('/supp_utilisateur/:id', async(req, res) => { 
+    const id = parseInt(req.params.id)
+    let conn;
+    try{
+        console.log("Lancement de la connexion")
+        conn = await pool.getConnection();
+        console.log("Lancement de la requête")
+        //suppression d'un utilisateur en fonciton de son id
+        const supp = await conn.query('delete from `utilisateurs` where `id` = ? ', [id]);
+        console.log(supp);
+        res.status(200).json(supp.affectedRows);
+    }
+    catch(err){
+        console.log(err);
+    }
+})
+
+//modification utilisateur
+app.put('/utilisateurModif/:id', async (req, res) => {
+    const id = req.params.id;
+    const nom = req.body.nom;
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        await conn.query(
+            'UPDATE utilisateurs SET nom = ? WHERE id = ?;',
+            [nom,id]
+        );
+        res.status(200).json({ message: 'Article updated successfully' });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+        if (conn) conn.release();
+    }
+});
+
 
 
 
