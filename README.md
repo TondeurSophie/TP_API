@@ -5,4 +5,5 @@ Certaines fois, il faut relancer la connexion dans le terminal pour que tout s'a
 Lorsque l'on se connecte ou se déconnecte, il faut actualiser la page pour voir la différence en connecté et déconnecté (en particulier pour le lien "mes_articles").
 
 L'image de Pac-man redirige vers le menu principal et l'image de droite permet la déconnexion.
+Sur le pc de Morgane il n'y a aucune erreur dans la console.
 
