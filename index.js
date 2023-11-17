@@ -69,18 +69,25 @@ app.get('/locations', async(req,res) => {
 })
 
 //affichage des locations en fonction id_utilisateur
-app.get('/locations', async(req,res) => {
+app.get('/location/:id', async (req, res) => {
+    const id_conn = req.params.id;
+    console.log(id_conn)
     let conn;
-    try{
-        console.log("Lancement de la connexion")
+    try {
         conn = await pool.getConnection();
-        console.log("Lancement de la requête")
-        const rows = await conn.query('select * from locations where');
-        console.log(rows);
-        res.status(200).json(rows);
-    }
-    catch(err){
+        const rows = await conn.query('SELECT * FROM locations WHERE id_utilisateur = ?;', [id_conn]);
+        console.log("connexion",rows)
+        if (rows.length > 0) {
+            res.status(200).json(rows);
+            console.log(rows)
+        } else {
+            res.status(404).json({ error: 'Article not found' });
+        }
+    } catch (err) {
         console.log(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+        if (conn) conn.release();
     }
 })
 
